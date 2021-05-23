@@ -1,5 +1,6 @@
 package org.jik.retrofit_project
 
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -15,6 +16,7 @@ import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity(), TextWatcher {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -24,7 +26,8 @@ class MainActivity : AppCompatActivity(), TextWatcher {
         editText.addTextChangedListener(this)
     }
     fun setAdapter(dataList: List<DataX>) {
-        val adapter = CustomAdapter(dataList,this)
+        val adapter = CustomAdapter()
+        // adapter.filteredList= dataList as MutableList<DataX>
         val recyclerview = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerview.adapter = adapter
         recyclerview.layoutManager = LinearLayoutManager(this)
@@ -43,6 +46,7 @@ class MainActivity : AppCompatActivity(), TextWatcher {
                     if (response.isSuccessful) {
                         val body = response.body()
                         setAdapter(body?.data!!)
+                        dum.dum.addAll(body.data)
                     } else {
                         Toast.makeText(baseContext, "서버연결은 됬으나 데이터를 가져올 수 없습니다.", Toast.LENGTH_LONG)
                             .show()
@@ -57,14 +61,15 @@ class MainActivity : AppCompatActivity(), TextWatcher {
     }
 
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        TODO("Not yet implemented")
+
     }
 
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        CustomAdapter().filter.filter(p0)
 
     }
 
     override fun afterTextChanged(p0: Editable?) {
-        TODO("Not yet implemented")
+
     }
 }
