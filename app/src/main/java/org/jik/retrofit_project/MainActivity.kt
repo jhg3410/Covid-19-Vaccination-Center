@@ -1,15 +1,12 @@
 package org.jik.retrofit_project
 
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.*
@@ -25,7 +22,7 @@ class MainActivity : AppCompatActivity(), TextWatcher {
         var editText = findViewById<EditText>(R.id.editText)
         editText.addTextChangedListener(this)
     }
-    fun setAdapter(dataList: List<DataX>) {
+    fun setAdapter() {
         val adapter = CustomAdapter()
         // adapter.filteredList= dataList as MutableList<DataX>
         val recyclerview = findViewById<RecyclerView>(R.id.recyclerView)
@@ -35,28 +32,28 @@ class MainActivity : AppCompatActivity(), TextWatcher {
 
     private fun loadData(){
         val retrofit = Retrofit.Builder()
-            .baseUrl(CoronaOpenApi.DOMAIN)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+                .baseUrl(CoronaOpenApi.DOMAIN)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
 
-            val coronaService = retrofit.create(CoronaService::class.java)
-            coronaService.datas(1,270,Config.API_KEY).enqueue(object :Callback<Data> {
+        val coronaService = retrofit.create(CoronaService::class.java)
+        coronaService.datas(1,270,Config.API_KEY).enqueue(object :Callback<Data> {
 
-                override fun onResponse(call: Call<Data>, response: Response<Data>) {
-                    if (response.isSuccessful) {
-                        val body = response.body()
-                        setAdapter(body?.data!!)
-                        dum.dum.addAll(body.data)
-                    } else {
-                        Toast.makeText(baseContext, "서버연결은 됬으나 데이터를 가져올 수 없습니다.", Toast.LENGTH_LONG)
+            override fun onResponse(call: Call<Data>, response: Response<Data>) {
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    setAdapter()
+                    dum.dum.addAll(body?.data!!)
+                } else {
+                    Toast.makeText(baseContext, "서버연결은 됬으나 데이터를 가져올 수 없습니다.", Toast.LENGTH_LONG)
                             .show()
-                    }
                 }
+            }
 
-                override fun onFailure(call: Call<Data>, t: Throwable) {
-                    Toast.makeText(baseContext, "서버연결 실패.", Toast.LENGTH_LONG).show()
-                }
-            })
+            override fun onFailure(call: Call<Data>, t: Throwable) {
+                Toast.makeText(baseContext, "서버연결 실패.", Toast.LENGTH_LONG).show()
+            }
+        })
 
     }
 
@@ -65,8 +62,7 @@ class MainActivity : AppCompatActivity(), TextWatcher {
     }
 
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        CustomAdapter().filter.filter(p0)
-
+        CustomAdapter().filter.filter(p0.toString())
     }
 
     override fun afterTextChanged(p0: Editable?) {

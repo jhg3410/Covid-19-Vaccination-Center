@@ -1,6 +1,5 @@
 package org.jik.retrofit_project
 
-import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,15 +10,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class CustomAdapter : RecyclerView.Adapter<CustomAdapter.Holder>(),Filterable{
-
-    var exam = dum.dum
-    var filteredList = exam
-    val unFilteredList = exam
-   
-
-    init {
-        Log.d("설마", filteredList.toString())
-    }
+    var filteredList = dum.dum
+    var unFilteredList = dum.dum
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_recycler, parent, false)
@@ -28,7 +20,7 @@ class CustomAdapter : RecyclerView.Adapter<CustomAdapter.Holder>(),Filterable{
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val data = filteredList[position]
-
+        Log.d("아이템", filteredList.toString())
         holder.setData(data)
     }
 
@@ -58,7 +50,7 @@ class CustomAdapter : RecyclerView.Adapter<CustomAdapter.Holder>(),Filterable{
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
                 filteredList = results?.values as MutableList<DataX>
-                CustomAdapter().notifyDataSetChanged()
+                notifyDataSetChanged()
                 Log.d("아이템", filteredList.toString())
             }
         }
@@ -71,5 +63,4 @@ class CustomAdapter : RecyclerView.Adapter<CustomAdapter.Holder>(),Filterable{
             itemView.findViewById<TextView>(R.id.phoneNumber).text = data?.phoneNumber
         }
     }
-
 }
