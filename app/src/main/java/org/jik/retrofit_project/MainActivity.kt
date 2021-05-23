@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity(), TextWatcher {
             .build()
 
             val coronaService = retrofit.create(CoronaService::class.java)
-            coronaService.datas(1,270,Configs.API_KEY).enqueue(object :Callback<Data> {
+            coronaService.datas(1,270,Config.API_KEY).enqueue(object :Callback<Data> {
 
                 override fun onResponse(call: Call<Data>, response: Response<Data>) {
                     if (response.isSuccessful) {
