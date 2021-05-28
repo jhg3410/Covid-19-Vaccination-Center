@@ -20,26 +20,22 @@ class CustomAdapter : RecyclerView.Adapter<CustomAdapter.Holder>(),Filterable{
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val data = filteredList[position]
-        Log.d("아이템", filteredList.toString())
         holder.setData(data)
     }
 
-    override fun getItemCount(): Int {
-        return filteredList.size
-    }
+
+    override fun getItemCount(): Int = filteredList.size
 
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val charString = constraint.toString()
-                if (charString.isEmpty()) { //⑶
+                if (charString.isEmpty()) {
                     filteredList = unFilteredList
                 } else {
-                    var filteringList = mutableListOf<DataX>()
+                    val filteringList = mutableListOf<DataX>()
                     for (item in unFilteredList) {
-                        if (item.address.contains(charString)){
-                            filteringList.add(item)
-                        }
+                        if (item.address.contains(charString)) filteringList.add(item)
                     }
                     filteredList = filteringList
                 }
@@ -51,16 +47,18 @@ class CustomAdapter : RecyclerView.Adapter<CustomAdapter.Holder>(),Filterable{
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
                 filteredList = results?.values as MutableList<DataX>
                 notifyDataSetChanged()
-                Log.d("아이템", filteredList.toString())
             }
         }
     }
 
-    class Holder(itemView: View?) : RecyclerView.ViewHolder(itemView!!){
+    class Holder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        val phone = itemView.findViewById<TextView>(R.id.phoneNumber)
+        val address = itemView.findViewById<TextView>(R.id.address)
+        val center = itemView.findViewById<TextView>(R.id.centerName)
         fun setData(data: DataX?) {
-            itemView.findViewById<TextView>(R.id.address).text = data?.address
-            itemView.findViewById<TextView>(R.id.centerName).text = data?.centerName
-            itemView.findViewById<TextView>(R.id.phoneNumber).text = data?.phoneNumber
+            address.text = data?.address
+            center.text = data?.centerName
+            phone.text = data?.phoneNumber
         }
     }
 }

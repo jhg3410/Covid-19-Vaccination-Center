@@ -13,19 +13,23 @@ import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity(), TextWatcher {
+    lateinit var recyclerview: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         loadData()
 
-        var editText = findViewById<EditText>(R.id.editText)
+        recyclerview =findViewById(R.id.recyclerView)
+
+        val editText = findViewById<EditText>(R.id.editText)
         editText.addTextChangedListener(this)
     }
+
+
     fun setAdapter() {
         val adapter = CustomAdapter()
         // adapter.filteredList= dataList as MutableList<DataX>
-        val recyclerview = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerview.adapter = adapter
         recyclerview.layoutManager = LinearLayoutManager(this)
     }
@@ -62,7 +66,8 @@ class MainActivity : AppCompatActivity(), TextWatcher {
     }
 
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        CustomAdapter().filter.filter(p0.toString())
+        (recyclerview.adapter as CustomAdapter).filter.filter(p0)
+//        CustomAdapter().filter.filter(p0.toString())
     }
 
     override fun afterTextChanged(p0: Editable?) {
